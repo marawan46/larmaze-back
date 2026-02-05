@@ -10,6 +10,7 @@ const app = express();
 
 const allowedOrigins = [
   "http://localhost:5173",
+  "https://larmaze-back.vercel.app/api"
 ];
 app.use(
   cors({
