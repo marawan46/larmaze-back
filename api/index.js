@@ -31,8 +31,8 @@ app.use("/api/products", productsRoutes);
 app.get("/", (req, res) => {
   res.send("Menu API is running 🚀");
 });
-app.listen(3000, () => {
-  console.log(`Server listening on port ${3000}`);
-});
+// app.listen(3000, () => {
+//   console.log(`Server listening on port ${3000}`);
+// });
 // Export for Vercel serverless
 module.exports = app;
