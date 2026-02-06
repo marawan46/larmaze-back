@@ -1,9 +1,10 @@
 const express = require("express");
+const verfiyAdmin = require("../middleware/auth")
 const router = express.Router();
 const Product = require("../models/Product");
 
 // CREATE PRODUCT
-router.post("/", async (req, res) => {
+router.post("/",verfiyAdmin, async (req, res) => {
   try {
     const product = new Product(req.body);
     await product.save();
@@ -57,7 +58,7 @@ router.get("/:id", async (req, res) => {
 });
 
 // UPDATE PRODUCT (PATCH)
-router.patch("/:id", async (req, res) => {
+router.patch("/:id",verfiyAdmin, async (req, res) => {
   try {
     const updated = await Product.findByIdAndUpdate(
       req.params.id,
@@ -72,7 +73,7 @@ router.patch("/:id", async (req, res) => {
 });
 
 // DELETE PRODUCT
-router.delete("/:id", async (req, res) => {
+router.delete("/:id",verfiyAdmin, async (req, res) => {
   try {
     await Product.findByIdAndDelete(req.params.id);
     res.json({ message: "Product deleted" });
