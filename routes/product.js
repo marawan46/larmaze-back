@@ -20,12 +20,15 @@ router.get("/", async (req, res) => {
   try {
     const { lang } = req.query;
 
-    const products = await Product.find().sort({ order: 1 });
+    const sortField =
+      lang === "ar" ? "category_ar" : "category_en";
+
+    const products = await Product.find()
+      .sort({ order: 1 }); // secondary sort optional
 
     if (!lang) {
       return res.json(products);
     }
-
     // Language filter logic
     const filtered = products.map((p) => ({
       _id: p._id,
@@ -56,7 +59,28 @@ router.get("/:id", async (req, res) => {
     res.status(404).json({ message: "Product not found" });
   }
 });
+// UPDATE CATEGORY ORDER
+router.patch("/update-order", async (req, res) => {
+  try {
+    const { category, newOrder } = req.body;
 
+    if (!category || newOrder === undefined) {
+      return res.status(400).json({ message: "category and newOrder required" });
+    }
+
+    const result = await Product.updateMany(
+      { category_en: category }, // or category_ar
+      { $set: { order: newOrder } }
+    );
+
+    res.json({
+      message: "Order updated successfully",
+      modifiedCount: result.modifiedCount
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
 // UPDATE PRODUCT (PATCH)
 router.patch("/:id",verfiyAdmin, async (req, res) => {
   try {
